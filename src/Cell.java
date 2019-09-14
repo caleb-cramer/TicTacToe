@@ -1,6 +1,10 @@
 public class Cell {
     private Coordinates coordinates = new Coordinates();
-    private String symbol = " ";
+    private String symbol;
+
+    public Cell(){
+        this.symbol="-";
+    }
 
     public Cell(Coordinates coordinates, String symbol) {
         this.coordinates = coordinates;

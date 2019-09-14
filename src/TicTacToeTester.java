@@ -1,4 +1,6 @@
+
 public class TicTacToeTester {
+
     public static void main(String[] args) {
 
         Coordinates origin= new Coordinates(0,0);
@@ -7,7 +9,9 @@ public class TicTacToeTester {
         Cell beginning = new Cell(origin,"X");
         System.out.println(beginning);
 
-        Board game = new Board(3);
-        //System.out.println(game);
+        Board game = new Board();
+        game.playGame();
+
+
     }
 }
