@@ -2,7 +2,7 @@ import java.util.Scanner;
 public class Board {
     private int dim;
     private Cell[][] board;
-    Scanner scan =new Scanner(System.in);
+    private Scanner scan =new Scanner(System.in);
 
     public Board() {
         this.dim = 0;
@@ -14,7 +14,7 @@ public class Board {
         this.board = new Cell[dim][dim];
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                board[i][j]=new Cell(new Coordinates(dim,dim), "-");
+                this.board[i][j]=new Cell(new Coordinates(i,j), "-");
             }
         }
     }
@@ -38,7 +38,6 @@ public class Board {
     @Override
     public String toString() {
         String returnBoard = " ";
-
         for (int i = 0; i < dim; i++) {
             returnBoard=returnBoard+" " +Integer.toString(i);
         }
@@ -53,11 +52,52 @@ public class Board {
         return returnBoard;
     }
 
+    public boolean isValidMove(Coordinates coordinates){
+        return (board[coordinates.getRow()][coordinates.getColumn()].getSymbol()=="-");
+    }
+
+    public void makeMove(Coordinates coordinates, String playerSymbol){
+        if(isValidMove(coordinates)){
+            board[coordinates.getRow()][coordinates.getColumn()].setSymbol(playerSymbol);
+        }
+    }
+
+    /*public boolean isWinner(String playerSymbol){
+        for (int i = 0; i < dim; i++) {
+            if (board[i][i].getSymbol()==playerSymbol){
+                return true;}
+            for (int j = 0; j < dim; j++) {
+                if (board[i][j].getSymbol() == playerSymbol) {
+                    return true;
+                } else if (board[j][i].getSymbol() == playerSymbol) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }*/
+
     public void playGame(){
-        System.out.println("Welcome to Tic Tac Toe! There are two players, player 'X' and player 'O'... \n");
-        System.out.println("Please enter the dimension, N, of the NxN Tic Tac Toe board (an integer in [3, 9]): ");
-        String userDim = scan.nextLine();
-        Board game = new Board((Integer.parseInt(userDim)));
-        System.out.println("Player \"X\" is going first \n"+game);
+        boolean play = true;
+        System.out.println("Player \"X\" is going first \n"+toString());
+        while(play){
+            System.out.print("Player X, please enter the coordinates of your placement: ");
+            int colX = scan.nextInt();
+            int rowX = scan.nextInt();
+            Coordinates guessX = new Coordinates(rowX, colX);
+            makeMove(guessX,"X");
+            System.out.println(toString());
+            /*if(isWinner("X")){
+                break;
+                //play=false;
+            }*/
+            System.out.print("Player O, please enter the coordinates of your placement: ");
+            int colO = scan.nextInt();
+            int rowO = scan.nextInt();
+            Coordinates guess = new Coordinates(rowO, colO);
+            makeMove(guess,"O");
+            System.out.println(toString());
+            //play=false;
+        }
     }
 }
