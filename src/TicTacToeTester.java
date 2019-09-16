@@ -1,3 +1,7 @@
+/*Needs to fix the bad guess that skips a turn
+* Need to add stuff for full board
+* */
+
 import java.util.Scanner;
 public class TicTacToeTester {
 
