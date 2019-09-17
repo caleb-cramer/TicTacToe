@@ -1,3 +1,4 @@
+//This is one square in the board
 public class Cell {
     private Coordinates coordinates = new Coordinates();
     private String symbol;

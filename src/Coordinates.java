@@ -1,4 +1,6 @@
+//This is essentially an ordered pair class
 public class Coordinates {
+    //two private ints for col and row indices
     private int column=0;
     private int row=0;
 
@@ -17,6 +19,7 @@ public class Coordinates {
     public void setRow(int row) {
         this.row = row;
     }
+
 
     @Override
     public String toString() {

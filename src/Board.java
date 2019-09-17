@@ -1,17 +1,20 @@
 import java.util.Scanner;
+//this is the board for the game
 public class Board {
     private int dim;
     private Cell[][] board;
     private Scanner scan =new Scanner(System.in);
-
+    //not necessary
     public Board() {
         this.dim = 0;
         this.board = new Cell[0][0];
     }
 
+    //main constructor
     public Board(int dim) {
         this.dim = dim;
         this.board = new Cell[dim][dim];
+        //fill the board with "-"
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
                 this.board[i][j]=new Cell(new Coordinates(i,j), "-");
@@ -35,6 +38,7 @@ public class Board {
         this.board = board;
     }
 
+    //prints out the current
     @Override
     public String toString() {
         String returnBoard = " ";
@@ -52,6 +56,7 @@ public class Board {
         return returnBoard;
     }
 
+    //checks to see if the spot is filled by another guess
     public boolean isValidMove(Coordinates coordinates){
         boolean temp = board[coordinates.getRow()][coordinates.getColumn()].getSymbol()=="-";
         if (!temp){
@@ -59,14 +64,16 @@ public class Board {
         }
         return temp;
     }
-
+    //checks if move is okay and then fills the spot with the correct symbol
     public void makeMove(Coordinates coordinates, String playerSymbol){
         if(isValidMove(coordinates)){
             board[coordinates.getRow()][coordinates.getColumn()].setSymbol(playerSymbol);
         }
     }
-
+    //checks to see if playerSymbol is a winner
+    //checks row win, column win, diag win, anti diag win
     public boolean isWinner(Coordinates guess, String playerSymbol){
+        //idea from https://stackoverflow.com/questions/1056316/algorithm-for-determining-tic-tac-toe-game-over
         for (int i = 0; i < dim; i++) {
             if (board[guess.getRow()][i].getSymbol() != playerSymbol) {
                 break;
@@ -108,41 +115,46 @@ public class Board {
 
         return false;
     }
-
+    //method to control the player turn
+    public boolean playerTurn(String playerSymbol){
+        System.out.print("Player "+playerSymbol+", please enter the coordinates of your placement: ");
+        int col = scan.nextInt();
+        int row = scan.nextInt();
+        Coordinates guess = new Coordinates(row, col);
+        if (isValidMove(guess)) {
+            makeMove(guess, playerSymbol);
+        }
+        else{
+            playerTurn(playerSymbol);
+        }
+        System.out.println(toString());
+        if(isWinner(guess,playerSymbol)){
+            System.out.println("Player " +playerSymbol+ " won!");
+            return true;
+        }
+        return false;
+    }
+    //main loop that calls other methods
     public void playGame(){
         boolean play = true;
+        int totalMoves=0;
         System.out.println("Player \"X\" is going first \n"+toString());
         while(play){
-            System.out.print("Player X, please enter the coordinates of your placement: ");
-            int colX = scan.nextInt();
-            int rowX = scan.nextInt();
-            Coordinates guessX = new Coordinates(rowX, colX);
-            if (isValidMove(guessX)) {
-                makeMove(guessX, "X");
-            }
-            else{
-                makeMove(guessX, "X");
-            }
-            System.out.println(toString());
-            if(isWinner(guessX,"X")){
-                System.out.println("Player X won!");
+            if (totalMoves==dim*dim){
+                System.out.println("Scratch game!");
                 break;
             }
-            System.out.print("Player O, please enter the coordinates of your placement: ");
-            int colO = scan.nextInt();
-            int rowO = scan.nextInt();
-            Coordinates guessO = new Coordinates(rowO, colO);
-            if (isValidMove(guessO)) {
-                makeMove(guessO, "O");
+            if(totalMoves%2==0){
+                if(playerTurn("X")) {
+                    play=false;
+                }
             }
             else{
-                makeMove(guessO, "O");
+                if(playerTurn("O")) {
+                    play=false;
+                }
             }
-            System.out.println(toString());
-            if(isWinner(guessO,"O")){
-                System.out.println("Player O won!");
-                play=false;
-            }
+            totalMoves+=1;
         }
     }
 }
